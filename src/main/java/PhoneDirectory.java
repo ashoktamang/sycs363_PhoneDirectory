@@ -183,66 +183,20 @@ public class PhoneDirectory {
 	 * @param name Number of the contact whose number is to be changed
 	 * @param number New number of the contact.
 	 */
-	public void changeEntry(String name, String number) {
-		String directoryPath = getPath();
-		File fileName = new File(directoryPath);
-		String line=null;		
-		String new_name = name.concat(" "+number);
-		/*
-		 * The number for the corresponding name is stored in number
-		 * by calling function getNumber().
-		 * The name and number are concatenated to match the pattern as present in the file.
-		 */
-		int count = 0;
-		List<String> list = new ArrayList<String>();
-		/*
-		 * When the matched line is found, the new name and number entered
-		 * by the user is stored in place of the line in the Directory.
-		 */
-		try {
-			FileReader fileReader = new FileReader(fileName);			
-			BufferedReader bufferedReader = new BufferedReader(fileReader);	
-			
-			while((line=bufferedReader.readLine())!=null){
-				if(line.equals(new_name)){
-					count++;
-					Scanner in = new Scanner (System.in);
-					System.out.println("Enter the new name to be entered : ");
-					String new__name;
-					new__name=in.nextLine();
-					System.out.println("Enter the new number to be entered : ");
-					String new_number;
-					new_number=in.nextLine();
-					new__name=new__name.concat(" "+new_number);
-					list.add(new__name);
-				}
-				else{
-					list.add(line);
-					
-				}
-			}
-			bufferedReader.close();
-			if(count==0){
-				System.out.println("ERROR!!! The items not found in Directory");
-			}
-			FileWriter fileWriter = new FileWriter(fileName);
-			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-			/*
-			 * All contents of the list are not written to the file.
-			 */
-			for(int i=0;i<list.size();i++){
-				bufferedWriter.write(list.get(i));
-				bufferedWriter.newLine();
-			}
-			
-			bufferedWriter.close();
-			
+	public void changeEntry(String name, String number){
+		Properties prop = new Properties(); 
+		try{
+			InputStream inStream = new FileInputStream("src/main/resources/contacts.properties");
+			prop.load(inStream);
+			prop.setProperty(name, number);
+			inStream.close();
+			OutputStream outStream = new FileOutputStream("src/main/resources/contacts.properties"); 
+			prop.store(outStream, null);
+			outStream.close();
 		}
-		catch(FileNotFoundException ex){
-			System.out.println("Unable to oepn file");
+		catch (IOException ex){
+			ex.printStackTrace();
 		}
-		catch(IOException ex){
-			System.out.println("File not opened.");
-		}
+		
 	}
 }
