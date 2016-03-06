@@ -14,7 +14,7 @@ public class main {
 		PhoneDirectory phone = new PhoneDirectory();
 		phone.addEntry("Sam", "2022038441");
 		phone.addEntry("Anuraaag", "2022038552");
-		phone.changeEntry("Anuraag", "3734480009");
+		phone.changeEntry("Anuraag", "2022038552");
 		phone.addEntry("Ashok", "2022038441");
 		phone.getNumber("Ashok");
 		phone.deleteEntry("Sam");

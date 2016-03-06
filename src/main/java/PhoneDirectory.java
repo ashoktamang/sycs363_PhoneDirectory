@@ -18,6 +18,7 @@ public class PhoneDirectory {
 	 * The method access the phone.properties file which contains
 	 * 'path' as key and 'directory path' as value.
 	 * 
+	 * @throws IOException if an input or output exception occurred
 	 * @return the path of the phone directory file.
 	 */
 	private String getPath(){
@@ -27,7 +28,6 @@ public class PhoneDirectory {
 		try {
 			input = new FileInputStream("src/main/resources/phone.properties");
 			phoneDirectory.load(input);
-			System.out.println(phoneDirectory.getProperty("path"));
 			return phoneDirectory.getProperty("path");
 		} catch(IOException error) {
 			error.printStackTrace();
@@ -38,6 +38,8 @@ public class PhoneDirectory {
 	/**
 	 * Adds new contacts to the phone directory file.
 	 * 
+	 * 
+	 * @throws IOException if an input or output exception occurred
 	 * @param name Name of the new contact to be added to the phone directory file
 	 * @param number Number of the new contact to added with the new contact's name.
 	 * @return 
@@ -49,10 +51,11 @@ public class PhoneDirectory {
 		try{
 			FileWriter fileWriter  = new FileWriter(fileName,true);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-			String new_Line=name;
-			new_Line=new_Line.concat(" "+number);
-			bufferedWriter.write(new_Line);
-			bufferedWriter.newLine();	
+			String newContact = name;
+			newContact = newContact.concat(" "+number);
+			bufferedWriter.write(newContact);
+			bufferedWriter.newLine();
+			System.out.println(name + " is added to the phone directory");
 			bufferedWriter.close();
 			
 		}
@@ -73,13 +76,14 @@ public class PhoneDirectory {
 		File fileName= new File(directoryPath);
 		String line=null;
 		
-		String number=getNumber(name);
+		String number = getNumber(name);
+		System.out.println(number);
 		String new_name = name.concat(" "+number);
 		List<String> list = new ArrayList<String>();
 		/*
 		 * A list of strings is declared. The values that are not equal to the name are added to the list.
 		 */
-		int count=0;
+		int count = 0;
 		/*
 		 * The variable count is used to see if the name entered is found or not.
 		 * If the value of count dosn't change, the user is notified that the number is not found
@@ -87,7 +91,7 @@ public class PhoneDirectory {
 		try{
 			FileReader fileReader = new FileReader(fileName);			
 			BufferedReader bufferedReader = new BufferedReader(fileReader);			
-			String line_to_delete=new_name;
+			String line_to_delete = new_name;
 			while((line=bufferedReader.readLine())!=null){
 				if(line.equals(line_to_delete)){
 					count++;
@@ -126,13 +130,18 @@ public class PhoneDirectory {
 	}
 
 	/**
-	 * Returns the number of the contact given the contact's name
-	 * @param name
-	 * @return
+	 * Returns the number of the contact given the contact's name.
+	 * 
+	 * @throws IOException if an input or output exception occurred
+	 * @param name Name of the contact whose number will be returned.
+	 * @return Number of the contact given the contact's name.
 	 */
 	public String getNumber(String name) {
+		
+		String directoryPath = getPath();
+		
 		Scanner x;
-		int count=0;
+		int count = 0;
 		/*
 		 * The variable count is used to see if the name entered is found or not.
 		 * If the value of count dosn't change, the user is notified that the number is not found
@@ -143,7 +152,7 @@ public class PhoneDirectory {
 		 * When the name is found the number is entered.
 		 */
 		try{
-			x=new Scanner(new File("file.txt"));			
+			x=new Scanner(new File(directoryPath));			
 			while(x.hasNext()){
 				a = x.next();
 				if(a.equals(name)){
@@ -158,7 +167,7 @@ public class PhoneDirectory {
 			System.out.println("File not found");
 		}
 		if(count==0){
-			System.out.println("ERROR! " + name + " is not in Directory");
+			System.out.println("ERROR! " + name + " is not in the Directory");
 			return "NULL";
 		}
 		else{
@@ -167,29 +176,37 @@ public class PhoneDirectory {
 		
 	}
 
+	/**
+	 * Changes the number of the given contact's name.
+	 * 
+	 * @throws IOException if an input or output exception occurred.
+	 * @param name Number of the contact whose number is to be changed
+	 * @param number New number of the contact.
+	 */
 	public void changeEntry(String name, String number) {
-		File fileName = new File("file.txt");
+		String directoryPath = getPath();
+		File fileName = new File(directoryPath);
 		String line=null;		
 		String new_name = name.concat(" "+number);
 		/*
 		 * The number for the corresponding name is stored in number
 		 * by calling function getNumber().
-		 * The name and number are concatinated to match the pattern as present in the file.
+		 * The name and number are concatenated to match the pattern as present in the file.
 		 */
-		int count=0;
+		int count = 0;
 		List<String> list = new ArrayList<String>();
 		/*
 		 * When the matched line is found, the new name and number entered
 		 * by the user is stored in place of the line in the Directory.
 		 */
-		try{
+		try {
 			FileReader fileReader = new FileReader(fileName);			
 			BufferedReader bufferedReader = new BufferedReader(fileReader);	
 			
 			while((line=bufferedReader.readLine())!=null){
 				if(line.equals(new_name)){
 					count++;
-					Scanner in =new Scanner (System.in);
+					Scanner in = new Scanner (System.in);
 					System.out.println("Enter the new name to be entered : ");
 					String new__name;
 					new__name=in.nextLine();
