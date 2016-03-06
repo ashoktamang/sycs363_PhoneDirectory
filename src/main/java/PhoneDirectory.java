@@ -12,7 +12,14 @@ import java.io.IOException;
 public class PhoneDirectory {
 	private String name;
 	private String number;
-
+	
+	/**
+	 * Returns the path of phone directory file.
+	 * The method access the phone.properties file which contains
+	 * 'path' as key and 'directory path' as value.
+	 * 
+	 * @return the path of the phone directory file.
+	 */
 	private String getPath(){
 		Properties phoneDirectory = new Properties();
 		InputStream input = null;
@@ -28,6 +35,13 @@ public class PhoneDirectory {
 		}
 	}
 	
+	/**
+	 * Adds new contacts to the phone directory file.
+	 * 
+	 * @param name Name of the new contact to be added to the phone directory file
+	 * @param number Number of the new contact to added with the new contact's name.
+	 * @return 
+	 */
 	public void addEntry(String name, String number){
 		String directoryPath = getPath();
 		
@@ -46,12 +60,13 @@ public class PhoneDirectory {
 			System.out.println("Unable to open file : "+ex);
 		}	
 		
-		System.out.println(name);
-		System.out.println(number);
-		String path = getPath();
-		System.out.println(path);
 	}
 	
+	/**
+	 * Deletes the name and number of the given contact.
+	 * 
+	 * @param name Name of the contact to be deleted from the phone directory path
+	 */
 	public void deleteEntry(String name) {
 		String directoryPath = getPath();
 		
@@ -60,7 +75,6 @@ public class PhoneDirectory {
 		
 		String number=getNumber(name);
 		String new_name = name.concat(" "+number);
-//		List<String> list = new ArrayList<String>();
 		List<String> list = new ArrayList<String>();
 		/*
 		 * A list of strings is declared. The values that are not equal to the name are added to the list.
@@ -111,6 +125,11 @@ public class PhoneDirectory {
 		
 	}
 
+	/**
+	 * Returns the number of the contact given the contact's name
+	 * @param name
+	 * @return
+	 */
 	public String getNumber(String name) {
 		Scanner x;
 		int count=0;
